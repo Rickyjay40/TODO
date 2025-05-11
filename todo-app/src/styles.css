@@ -1,0 +1,29 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+  background-color: #0d0d0d;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: #f2f2f2;
+}
+
+/* Override Material theme colors */
+.mat-primary .mat-pseudo-checkbox-checked {
+  background-color: #5e60ce !important;
+}
+
+.mat-primary .mat-pseudo-checkbox-indeterminate {
+  background-color: #5e60ce !important;
+}
+
+.mat-checkbox-checked.mat-primary .mat-checkbox-background {
+  background-color: #5e60ce !important;
+}

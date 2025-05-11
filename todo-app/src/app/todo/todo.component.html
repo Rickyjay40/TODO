@@ -1,0 +1,122 @@
+<div class="min-h-screen bg-[#0d0d0d] flex flex-col items-center">
+  <!-- Header -->
+  <header class="w-full max-w-3xl pt-16 pb-20 flex justify-center">
+    <div class="flex items-center gap-3">
+      <mat-icon class="text-[#4ea8de]">rocket</mat-icon>
+      <h1 class="text-4xl font-bold">
+        <span class="text-[#4ea8de]">To</span>
+        <span class="text-[#5e60ce]">Do</span>
+      </h1>
+    </div>
+  </header>
+
+  <main class="w-full max-w-3xl px-4">
+    <!-- Add Task Input -->
+    <div class="flex gap-2 -mt-7 mb-8">
+      <mat-form-field appearance="outline" class="flex-1 bg-[#262626] rounded-lg">
+        <input 
+          matInput 
+          [(ngModel)]="newTodoTitle" 
+          placeholder="Create a Task" 
+          class="text-[#f2f2f2] placeholder:text-[#808080]"
+          (keydown)="handleKeyDown($event)"
+        />
+      </mat-form-field>
+      <button 
+        mat-raised-button 
+        class="h-14 w-24 bg-[#1e6f9f] hover:bg-[#0063bf] transition-colors rounded-lg flex items-center justify-center gap-2 text-white font-bold"
+        (click)="addTodo()"
+      >
+        Add
+        <mat-icon class="text-sm">add</mat-icon>
+      </button>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="mb-6">
+      <mat-form-field appearance="outline" class="w-full bg-[#262626] rounded-lg">
+        <mat-icon matPrefix class="text-[#808080] ml-2">search</mat-icon>
+        <input 
+          matInput 
+          [(ngModel)]="searchText" 
+          placeholder="Search tasks" 
+          class="text-[#f2f2f2] placeholder:text-[#808080]"
+          (input)="filterTodos()"
+        />
+      </mat-form-field>
+    </div>
+
+    <!-- Task List -->
+    <div class="space-y-3">
+      <div *ngFor="let todo of filteredTodos" class="p-4 bg-[#262626] rounded-lg flex items-start gap-3">
+        <!-- Checkbox -->
+        <mat-checkbox 
+          [(ngModel)]="todo.completed" 
+          (change)="updateTodo(todo)"
+          [color]="'primary'"
+          class="custom-checkbox mt-1 flex-shrink-0"
+          [ngClass]="{'completed-checkbox': todo.completed}"
+        ></mat-checkbox>
+
+        <!-- Task Text -->
+        <ng-container *ngIf="editingTodo?.id !== todo.id; else editTemplate">
+          <p class="text-[#f2f2f2] flex-1" [ngClass]="{'line-through text-[#808080]': todo.completed}">
+            {{ todo.title }}
+          </p>
+        </ng-container>
+
+        <!-- Edit Template -->
+        <ng-template #editTemplate>
+          <mat-form-field appearance="outline" class="flex-1 bg-[#333333] rounded-lg">
+            <input 
+              matInput 
+              [(ngModel)]="editText" 
+              class="text-[#f2f2f2]"
+              (keydown)="handleEditKeyDown($event)"
+              #editInput
+            />
+          </mat-form-field>
+        </ng-template>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-2">
+          <ng-container *ngIf="editingTodo?.id !== todo.id; else saveTemplate">
+            <button 
+              mat-icon-button 
+              class="text-[#808080] hover:text-[#4ea8de] transition-colors"
+              (click)="startEdit(todo)"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          </ng-container>
+
+          <ng-template #saveTemplate>
+            <button 
+              mat-icon-button 
+              class="text-[#808080] hover:text-[#4ea8de] transition-colors"
+              (click)="saveEdit()"
+            >
+              <mat-icon>check</mat-icon>
+            </button>
+            <button 
+              mat-icon-button 
+              class="text-[#808080] hover:text-[#e25858] transition-colors"
+              (click)="cancelEdit()"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </ng-template>
+
+          <button 
+            mat-icon-button 
+            class="text-[#808080] hover:text-[#e25858] transition-colors"
+            (click)="deleteTodo(todo.id)"
+            *ngIf="editingTodo?.id !== todo.id"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
